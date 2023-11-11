@@ -2,6 +2,12 @@
 
 // Initialize the game
 function init() {
+    
+    // prepare for math later
+    global.helix_d = global.scaffoldThickness + global.vineThickness
+    global.hpid2 = Math.pow(pi*global.helix_d,2)
+    
+    
     var cvs = document.getElementById("gameCanvas");
       cvs.style.width='100%';
       cvs.style.height='100%';  
@@ -10,15 +16,17 @@ function init() {
     global.canvas = cvs
     global.ctx = cvs.getContext("2d");
     
-    resetRand()
     resetGame()
     requestAnimationFrame(gameLoop);
 }
 
 function resetGame() {
-    var s = new Scaffold(v(.3,.3),v(.8,.8))
-    global.allScaffolds = [s]
-    global.allVines = [new Vine(s)]
+    var s1 = new Scaffold(v(.4,.4),v(.6,.4))
+    var s2 = new Scaffold(v(.6,.4),v(.6,.6))
+    global.allScaffolds = [s1,s2]
+    
+    var v1 = new Vine(...s1.getAB(0,.5))
+    global.allVines = [v1]
 }
 
 

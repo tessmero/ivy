@@ -1,4 +1,3 @@
-resetRand()
 
 const global = {
     
@@ -18,8 +17,14 @@ const global = {
     scaffoldcolor: 'black',
     
     //
-    scaffoldThickness: .005,
+    scaffoldThickness: .008,
     vineThickness: .005,
+    
+    // number of spirals around lattice
+    // per distance unit
+    spiralDensity: [2,100],
+    
+    growthSpeed: 1e-4, // distance per ms
     
     // relate screen pixels to virtual 2D units
     canvasOffsetX: 0,

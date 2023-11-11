@@ -4,8 +4,6 @@
 // Render graphics
 function draw(fps, t) {
     
-    resetRand()
-    
     var ctx = global.ctx
     var canvas = global.canvas
     //ctx.fillStyle = global.backgroundColor
@@ -13,16 +11,9 @@ function draw(fps, t) {
 
     var g = ctx
     
-    
-    // draw scaffolds
-    g.strokeStyle = global.scaffoldColor
-    g.lineWidth = global.scaffoldThickness
-    g.beginPath()
-    global.allScaffolds.forEach( s => s.draw(g) )
-    g.stroke()
-    
     // draw vines
     g.strokeStyle = global.vineColor
+    g.fillStyle = global.vineColor
     g.lineWidth = global.vineThickness
     global.allVines.forEach( v => v.draw(g) )
 

@@ -4,6 +4,17 @@
 function update(dt) {    
     fitToContainer()
     global.t += dt
+    
+    global.allVines.forEach(v => v.update(dt))
+    let newVines = []
+    global.allVines = global.allVines.filter(v => {
+            if( v.isDone() ){
+                newVines.push(...v.getNext())
+                return false
+            }
+            return true
+    })
+    global.allVines.push(...newVines)
 }
 
 
@@ -16,6 +27,9 @@ function fitToContainer(){
     
     var cvs = global.canvas
     if( (cvs.offsetWidth!=lastCanvasOffsetWidth) || (cvs.offsetHeight!=lastCanvasOffsetHeight) ){
+        
+      lastCanvasOffsetWidth  = cvs.offsetWidth;
+      lastCanvasOffsetHeight = cvs.offsetHeight;
         
       cvs.width  = cvs.offsetWidth;
       cvs.height = cvs.offsetHeight;
@@ -31,5 +45,14 @@ function fitToContainer(){
         var xr = -global.canvasOffsetX / global.canvasScale
         var yr = -global.canvasOffsetY / global.canvasScale
         global.screenCorners = [v(xr,yr),v(1-xr,yr),v(1-xr,1-yr),v(xr,1-yr)]
+    
+    
+        // draw scaffolds
+        let g = global.ctx
+        g.strokeStyle = global.scaffoldColor
+        g.lineWidth = global.scaffoldThickness
+        g.beginPath()
+        global.allScaffolds.forEach( s => s.draw(g) )
+        g.stroke()
     }
 }

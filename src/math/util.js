@@ -5,6 +5,7 @@ var twopi = 2*Math.PI
 function v(){return new Vector(...arguments)}
 function vp(){return Vector.polar(...arguments)}
 
+var rand = Math.random
 
 function randRange(min,max){
     return min + rand()*(max-min)
