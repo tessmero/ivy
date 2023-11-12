@@ -25,16 +25,23 @@ const global = {
     // per distance unit
     spiralDensity: [2,100],
     
+    // size of vine instances
+    // fraction of scaffold length
+    helixDist: [.1,.3],
+    
     // max dist vines are allowed to jump between scaffolds
     maxJump: .01, 
     
     growthSpeed: 4e-4, // distance per ms
     
-    branchRate: .3, // chance for helix to branch to >1 scaffold
+    branchRate: .3, // chance for helix to branch at scaffold intersection
     
-    twigRate: 3e-3, // chance to spawn twig
+    twigRate: 5e-3, // helix to spawn twig
     twigLen: [.01,.03],
     
+    leafRate: .5,// twig to spawn leaf
+    leafSize: [.005,.012], // radius
+    leafLen: [.02,.04], // length
     
     // relate screen pixels to virtual 2D units
     canvasOffsetX: 0,
@@ -49,10 +56,7 @@ const global = {
     
     // objects
     allScaffolds: [],
-    allVines: [], // Vine or Twig instances
-    
-    // balloon collision settings
-    nCollisionChecks: 10, // checks per balloon per update
+    allVines: [], // Vine/Twig/Leaf intances
     
     // debug
     debugBezierPoints: false,

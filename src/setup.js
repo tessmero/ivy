@@ -31,7 +31,7 @@ function resetGame() {
         }
     }
     let s = global.allScaffolds[Math.floor(global.allScaffolds.length/2)]
-    global.allVines = [new Vine(s,0,.3)]
+    global.allVines = [new Vine(s,0,.2)]
 }
 
 

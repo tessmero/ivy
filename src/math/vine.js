@@ -56,7 +56,7 @@ class Vine {
         if( (!this.reverse) && (this.stop<.8) ){
             
             // continue on the current scaffold
-            let newStop = this.stop+randRange(.3,.5)
+            let newStop = this.stop+randRange(...global.helixDist)
             if( newStop > .8 ) newStop = 1
             return [new Vine(this.scaffold,this.stop,newStop,this.reverseHelix)]
         }
@@ -65,7 +65,7 @@ class Vine {
         if( (this.reverse) && (this.stop>.2) ){
             
             // continue on the current scaffold
-            let newStop = this.stop-randRange(.3,.5)
+            let newStop = this.stop-randRange(...global.helixDist)
             if( newStop<.2 ) newStop = 0
             return [new Vine(this.scaffold,this.stop,newStop,this.reverseHelix)]
         }
@@ -90,9 +90,9 @@ class Vine {
                 }
                 
                 if( s[1] ){
-                    result.push(new Vine(s[0],0,randRange(.3,.5),rh))
+                    result.push(new Vine(s[0],0,randRange(...global.helixDist),rh))
                 } else {
-                    result.push(new Vine(s[0],1,1-randRange(.3,.5),rh))
+                    result.push(new Vine(s[0],1,1-randRange(...global.helixDist),rh))
                 }
             } else {
                 break

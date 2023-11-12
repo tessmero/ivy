@@ -1,20 +1,20 @@
 // loose twig sticking out of Vine
-class Twig{
+class Leaf{
     
     constructor(p,angle,infront){
-        this.p = p
         this.infront = infront
-        let len = randRange(...global.twigLen)
+        this.maxRad = randRange(...global.leafSize)
+        let len = randRange(...global.leafLen)
         
         // pick bezier curve points
         let a = p
-        let b = p.add(vp(angle,len/2)).add(vp(angle+pio2,randRange(-len,len)))
+        let b = p.add(vp(angle,len/2)).add(vp(angle+pio2,randRange(-len/4,len/4)))
         let c = p.add(vp(angle,len))
         this.points = [a,b,c]
         
         
         this.nSegs = Math.floor(len*1e3)
-        this.growthDuration = len/global.growthSpeed
+        this.growthDuration = 10*len/global.growthSpeed
         this.t = 0
         this.pt = 0
     }
@@ -29,12 +29,6 @@ class Twig{
     }
     
     getNext(){
-        if( rand() < global.leafRate ){
-            let ps = this.points
-            let n = ps.length
-            let angle = ps[n-1].sub(ps[n-2]).getAngle()
-            return [new Leaf(this.p, angle, this.infront)]
-        }
         return []
     }
     
@@ -48,13 +42,15 @@ class Twig{
         
         // draw subsegment
         for( var i = start ; (i<stop)&&(i<nSegs) ; i++ ){
-            let p = bezier(this.points,i/nSegs)
-            this.p = p
+            var p = bezier(this.points,i/nSegs)
+            
+            var rad = this.maxRad * Math.sin(pi*i/nSegs)
+            if( rad < (global.vineThicknes/2) ) rad = global.vineThickness/2
             
             // draw circle
             g.beginPath()
             g.moveTo(p.x,p.y)
-            g.arc(p.x,p.y,global.vineThickness/2,0,twopi)
+            g.arc(p.x,p.y,rad,0,twopi)
             g.fill()
         }
          
