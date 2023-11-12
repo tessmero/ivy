@@ -3,6 +3,7 @@ class Scaffold {
     constructor(a,b){
         this.a = a
         this.b = b
+        this.angle = b.sub(a).getAngle()
     }
     
     draw(g){

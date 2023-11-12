@@ -21,13 +21,17 @@ function init() {
 }
 
 function resetGame() {
-    var s1 = new Scaffold(v(.4,.4),v(.6,.4))
-    //var s2 = new Scaffold(v(.6,.4),v(.6,.6))
-    var s2 = new Scaffold(v(.6,.6),v(.6,.4))
-    global.allScaffolds = [s1,s2]
-    
-    var v1 = new Vine(s1,0,.3)
-    global.allVines = [v1]
+    global.allScaffolds = []
+    let dx = .1
+    let dy = .1
+    for( let x = 0 ; x < 1 ; x += dx ){
+        for( let y = 0 ; y < 1 ; y += dy ){
+            global.allScaffolds.push(new Scaffold(v(x,y),v(x+dx,y)))
+            global.allScaffolds.push(new Scaffold(v(x,y),v(x,y+dy)))
+        }
+    }
+    let s = global.allScaffolds[Math.floor(global.allScaffolds.length/2)]
+    global.allVines = [new Vine(s,0,.3)]
 }
 
 

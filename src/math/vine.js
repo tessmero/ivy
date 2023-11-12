@@ -1,11 +1,15 @@
 // animated ivy branch
 class Vine {
-    constructor(scaffold,start,stop){
+    constructor(scaffold,start,stop,reverseHelix=false,startPadding=null){
         this.scaffold = scaffold
         scaffold.occupied = true
         this.start = start
         this.stop = stop
         this.reverse = (stop<start)
+        this.reverseHelix = reverseHelix
+        if( startPadding == null ) startPadding = rand() * global.vinePadding
+        this.startPadding = startPadding
+        this.stopPadding = rand() * global.vinePadding
         
         var [a,b] = scaffold.getAB(start,stop)
         this.a = a
@@ -54,8 +58,8 @@ class Vine {
             
             // continue on the current scaffold
             let newStop = this.stop+randRange(.3,.5)
-            if( newStop > 1 ) newStop = 1
-            return [new Vine(this.scaffold,this.stop,newStop)]
+            if( newStop > .8 ) newStop = 1
+            return [new Vine(this.scaffold,this.stop,newStop,this.reverseHelix)]
         }
         
         // check if there is still space on the current scaffold
@@ -63,44 +67,57 @@ class Vine {
             
             // continue on the current scaffold
             let newStop = this.stop-randRange(.3,.5)
-            if( newStop < 0 ) newStop = 0
-            return [new Vine(this.scaffold,this.stop,newStop)]
+            if( newStop<.2 ) newStop = 0
+            return [new Vine(this.scaffold,this.stop,newStop,this.reverseHelix)]
         }
         
-        // look for next scaffold somewhere in front-right
-        let p = this.b//.add(vp(this.d.getAngle()+pio4,global.maxJump))
-        let s = this.getNearestUnoccupiedScaffold(p)
+        let result = []
         
-        // grow on new scaffold
-        if( s ){
-            if( s[1] ){
-                return [new Vine(s[0],0,randRange(.3,.5))]
+        do{
+        
+            // look for next scaffold nearby
+            let p = this.b//.add(vp(this.d.getAngle()+pio4,global.maxJump))
+            let all_s = this.getNextScaffolds(p)
+            shuffle(all_s)
+            
+            // grow on new scaffold
+            if( all_s.length > 0 ){
+                let s = all_s.pop()
+                
+                // check if new scaffodl has same orientation as current
+                let rh = this.reverseHelix
+                if( Math.abs(s[0].angle-this.scaffold.angle) > .1 ){
+                    rh = !rh
+                }
+                
+                if( s[1] ){
+                    result.push(new Vine(s[0],0,randRange(.3,.5),rh))
+                } else {
+                    result.push(new Vine(s[0],1,1-randRange(.3,.5),rh))
+                }
             } else {
-                return [new Vine(s[0],1,1-randRange(.3,.5))]
+                break
             }
-        }
+            
+        }while( rand() < global.branchRate )
         
-        // stop growing
-        return []
+        return result
     }
     
-    getNearestUnoccupiedScaffold(p){
+    getNextScaffolds(p){
         let mj2 = Math.pow(global.maxJump,2)
-        let result = null
-        let md2 = Infinity
+        let result = []
         global.allScaffolds.forEach( s => {
             if( s.occupied ) return
             
             let d2 = p.sub(s.a).getD2()
-            if( (d2<mj2) && (d2<md2) ){
-                md2 = d2
-                result = [s,true]
+            if( (d2<mj2) ){
+                result.push([s,true])
             }
             
             d2 = p.sub(s.b).getD2()
-            if( (d2<mj2) && (d2<md2) ){
-                md2 = d2
-                result = [s,false]
+            if( (d2<mj2) ){
+                result.push([s,false])
             }
         })
         return result
@@ -120,11 +137,14 @@ class Vine {
         var prev = a
         for( var i = start ; (i<stop)&&(i<nSegs) ; i++ ){
             var ang = twopi*i/nSegs*this.nPeriods
+            var padding = avg(this.startPadding,this.stopPadding,i/nSegs)
             
             // occlude parts of the vine the scaffolds
             g.globalCompositeOperation = (((ang+pio2)%twopi)<pi) ? "destination-over" : "source-over";  
             
             var amp = this.amp * Math.sin(ang)
+            if( this.reverseHelix ) amp *= -1
+            amp += Math.sign(amp) * padding
             var p = va(a,b,i/nSegs).add(vp(this.norm,amp))
             
             g.beginPath()

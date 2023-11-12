@@ -35,7 +35,7 @@ function fitToContainer(){
       cvs.height = cvs.offsetHeight;
         
         var padding = 0; // (extra zoom IN) thickness of pixels CUT OFF around edges
-        var dimension = Math.max(cvs.width, cvs.height) + padding*2;
+        var dimension = Math.min(cvs.width, cvs.height) + padding*2;
         global.canvasScale = dimension;
         global.canvasOffsetX = (cvs.width - dimension) / 2;
         global.canvasOffsetY = (cvs.height - dimension) / 2;

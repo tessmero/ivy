@@ -12,21 +12,25 @@ const global = {
     ctx: null,
 
     // 
-    backgroundColor: 'white',
     vineColor: 'green',
-    scaffoldcolor: 'black',
+    scaffoldColor: 'gray',
     
     //
     scaffoldThickness: .008,
     vineThickness: .005,
     
+    vinePadding: .002, // max space between a vine and its scaffold
+    
     // number of spirals around lattice
     // per distance unit
     spiralDensity: [2,100],
     
-    maxJump: 1, // max dist growth off scaffold
+    // max dist vines are allowed to jump between scaffolds
+    maxJump: .01, 
     
-    growthSpeed: 1e-4, // distance per ms
+    growthSpeed: 4e-4, // distance per ms
+    
+    branchRate: .4, 
     
     // relate screen pixels to virtual 2D units
     canvasOffsetX: 0,
