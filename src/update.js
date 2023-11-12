@@ -5,6 +5,7 @@ function update(dt) {
     fitToContainer()
     global.t += dt
     
+    // update objects being drawn
     global.allVines.forEach(v => v.update(dt))
     let newVines = []
     global.allVines = global.allVines.filter(v => {
@@ -15,6 +16,15 @@ function update(dt) {
             return true
     })
     global.allVines.push(...newVines)
+            
+    // autoreset periodically
+    if( global.allVines.length == 0 ){
+        if( global.resetCountdown > 0 ){
+            global.resetCountdown -= dt
+        } else {
+            fitToContainer(true) 
+        }
+    }
 }
 
 
@@ -23,10 +33,10 @@ function update(dt) {
 
 var lastCanvasOffsetWidth = -1;
 var lastCanvasOffsetHeight = -1;
-function fitToContainer(){
+function fitToContainer(forceReset=false){
     
     var cvs = global.canvas
-    if( (cvs.offsetWidth!=lastCanvasOffsetWidth) || (cvs.offsetHeight!=lastCanvasOffsetHeight) ){
+    if( forceReset || (cvs.offsetWidth!=lastCanvasOffsetWidth) || (cvs.offsetHeight!=lastCanvasOffsetHeight) ){
         
       lastCanvasOffsetWidth  = cvs.offsetWidth;
       lastCanvasOffsetHeight = cvs.offsetHeight;
@@ -46,13 +56,6 @@ function fitToContainer(){
         var yr = -global.canvasOffsetY / global.canvasScale
         global.screenCorners = [v(xr,yr),v(1-xr,yr),v(1-xr,1-yr),v(xr,1-yr)]
     
-    
-        // draw scaffolds
-        let g = global.ctx
-        g.strokeStyle = global.scaffoldColor
-        g.lineWidth = global.scaffoldThickness
-        g.beginPath()
-        global.allScaffolds.forEach( s => s.draw(g) )
-        g.stroke()
+        resetGame()
     }
 }

@@ -21,6 +21,7 @@ function init() {
 }
 
 function resetGame() {
+    global.resetCountdown = global.resetDelay
     global.allScaffolds = []
     let dx = .1
     let dy = .1
@@ -32,6 +33,14 @@ function resetGame() {
     }
     let s = global.allScaffolds[Math.floor(global.allScaffolds.length/2)]
     global.allVines = [new Vine(s,0,.2)]
+    
+    // draw scaffolds
+    let g = global.ctx
+    g.strokeStyle = global.scaffoldColor
+    g.lineWidth = global.scaffoldThickness
+    g.beginPath()
+    global.allScaffolds.forEach( s => s.draw(g) )
+    g.stroke()
 }
 
 

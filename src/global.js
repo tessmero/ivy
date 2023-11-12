@@ -3,8 +3,8 @@ const global = {
     
     // total time elapsed in milliseconds
     t: 0,
-    resetCountdown: 30000,
-    resetDelay: 30000,
+    resetCountdown: 1000,
+    resetDelay: 1000,
     
     
     // graphics context
