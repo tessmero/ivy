@@ -22,10 +22,11 @@ function init() {
 
 function resetGame() {
     var s1 = new Scaffold(v(.4,.4),v(.6,.4))
-    var s2 = new Scaffold(v(.6,.4),v(.6,.6))
+    //var s2 = new Scaffold(v(.6,.4),v(.6,.6))
+    var s2 = new Scaffold(v(.6,.6),v(.6,.4))
     global.allScaffolds = [s1,s2]
     
-    var v1 = new Vine(...s1.getAB(0,.5))
+    var v1 = new Vine(s1,0,.3)
     global.allVines = [v1]
 }
 

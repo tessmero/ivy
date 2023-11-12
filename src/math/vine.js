@@ -1,10 +1,18 @@
 // animated ivy branch
 class Vine {
-    constructor(a,b){
+    constructor(scaffold,start,stop){
+        this.scaffold = scaffold
+        scaffold.occupied = true
+        this.start = start
+        this.stop = stop
+        this.reverse = (stop<start)
+        
+        var [a,b] = scaffold.getAB(start,stop)
         this.a = a
         this.b = b
         
         let d = b.sub(a)
+        this.d = d
         let dist = d.getMagnitude()
         
         this.amp = global.helix_d/2
@@ -40,7 +48,62 @@ class Vine {
     // return list of length 1 to grow normally
     // return empty list to stop growing
     getNext(){
-        return [new Vine(this.b, this.b.add(this.b.sub(this.a)))]
+        
+        // check if there is still space on the current scaffold
+        if( (!this.reverse) && (this.stop<.8) ){
+            
+            // continue on the current scaffold
+            let newStop = this.stop+randRange(.3,.5)
+            if( newStop > 1 ) newStop = 1
+            return [new Vine(this.scaffold,this.stop,newStop)]
+        }
+        
+        // check if there is still space on the current scaffold
+        if( (this.reverse) && (this.stop>.2) ){
+            
+            // continue on the current scaffold
+            let newStop = this.stop-randRange(.3,.5)
+            if( newStop < 0 ) newStop = 0
+            return [new Vine(this.scaffold,this.stop,newStop)]
+        }
+        
+        // look for next scaffold somewhere in front-right
+        let p = this.b//.add(vp(this.d.getAngle()+pio4,global.maxJump))
+        let s = this.getNearestUnoccupiedScaffold(p)
+        
+        // grow on new scaffold
+        if( s ){
+            if( s[1] ){
+                return [new Vine(s[0],0,randRange(.3,.5))]
+            } else {
+                return [new Vine(s[0],1,1-randRange(.3,.5))]
+            }
+        }
+        
+        // stop growing
+        return []
+    }
+    
+    getNearestUnoccupiedScaffold(p){
+        let mj2 = Math.pow(global.maxJump,2)
+        let result = null
+        let md2 = Infinity
+        global.allScaffolds.forEach( s => {
+            if( s.occupied ) return
+            
+            let d2 = p.sub(s.a).getD2()
+            if( (d2<mj2) && (d2<md2) ){
+                md2 = d2
+                result = [s,true]
+            }
+            
+            d2 = p.sub(s.b).getD2()
+            if( (d2<mj2) && (d2<md2) ){
+                md2 = d2
+                result = [s,false]
+            }
+        })
+        return result
     }
     
     draw(g){

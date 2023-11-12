@@ -1,6 +1,7 @@
 // shorthands
 var pi = Math.PI
 var pio2 = Math.PI/2
+var pio4 = Math.PI/4
 var twopi = 2*Math.PI
 function v(){return new Vector(...arguments)}
 function vp(){return Vector.polar(...arguments)}
