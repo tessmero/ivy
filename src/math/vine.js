@@ -13,6 +13,7 @@ class Vine {
         
         var [a,b] = scaffold.getAB(start,stop)
         this.a = a
+        this.prev = a
         this.b = b
         
         let d = b.sub(a)
@@ -125,36 +126,42 @@ class Vine {
     draw(g){
         let newTwigs = []
         
-        var a = this.a
-        var b = this.b
-        var nSegs = this.nSegs
+        let a = this.a
+        let b = this.b
+        let nSegs = this.nSegs
         
-        var start = Math.floor(nSegs*this.pt/this.growthDuration)
-        var stop = Math.floor(nSegs*this.t/this.growthDuration)
+        let start = Math.floor(nSegs*this.pt/this.growthDuration)
+        let stop = Math.floor(nSegs*this.t/this.growthDuration)
         
         //g.restore()
         
         // draw vine segment
-        var prev = a
-        for( var i = start ; (i<stop)&&(i<nSegs) ; i++ ){
-            var ang = twopi*i/nSegs*this.nPeriods
-            var padding = avg(this.startPadding,this.stopPadding,i/nSegs)
+        for( let i = start ; (i<stop)&&(i<nSegs) ; i++ ){
+            let ang = twopi*i/nSegs*this.nPeriods
+            let padding = avg(this.startPadding,this.stopPadding,i/nSegs)
             
             // decide whether this should be occluded by scaffold
             let infront = (((ang+pio2)%twopi)<pi)
             g.globalCompositeOperation = infront ? "destination-over" : "source-over";  
             
             // compute point on helix
-            var amp = this.amp * Math.sin(ang)
+            let amp = this.amp * Math.sin(ang)
             if( this.reverseHelix ) amp *= -1
             amp += Math.sign(amp) * padding
-            var p = va(a,b,i/nSegs).add(vp(this.norm,amp))
+            let p = va(a,b,i/nSegs).add(vp(this.norm,amp))
             
-            //draw circle
-            g.beginPath()
-            g.moveTo(p.x,p.y)
-            g.arc(p.x,p.y,global.vineThickness/2,0,twopi)
-            g.fill()
+            //draw
+            if( true ){
+                g.beginPath()
+                g.moveTo(this.prev.x,this.prev.y)
+                g.lineTo(p.x,p.y)
+                g.stroke()
+            } else {
+                g.beginPath()
+                g.moveTo(p.x,p.y)
+                g.arc(p.x,p.y,global.vineThickness/2,0,twopi)
+                g.fill()
+            }
             
             if( rand() < global.twigRate ){
                 // add twig to be drawn later
@@ -164,7 +171,7 @@ class Vine {
                 newTwigs.push( new Twig(p,angle,infront) )
             }
             
-            prev = p
+            this.prev = p
         }
          
         return newTwigs

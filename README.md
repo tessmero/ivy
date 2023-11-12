@@ -2,7 +2,9 @@
 
 Ivy procedurally grows on a lattice. 
 
-New trick using js canvas globalCompositeOperation for occlusion. To draw ivy spiralling around the scaffold, alternate between two different compositing modes (front vs behind). 
+Uses non-clearing canvas like trees. 
+
+Uses globalCompositeOperation for occlusion. Alternates between two different compositing modes (front vs behind) as ivy spirals around the lattice.
 
 
 ## Demo

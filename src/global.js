@@ -16,14 +16,14 @@ const global = {
     scaffoldColor: '#742',
     
     //
-    scaffoldThickness: .01,
-    vineThickness: .005,
+    scaffoldThickness: .008,
+    vineThickness: .004,
     
-    vinePadding: .002, // max space between a vine and its scaffold
+    vinePadding: 0, // max space between a vine and its scaffold
     
     // number of spirals around lattice
     // per distance unit
-    spiralDensity: [2,100],
+    spiralDensity: [1.3,130],
     
     // size of vine instances
     // fraction of scaffold length
@@ -34,7 +34,7 @@ const global = {
     
     growthSpeed: 4e-4, // distance per ms
     
-    branchRate: .3, // chance for helix to branch at scaffold intersection
+    branchRate: .5, // chance for helix to branch at scaffold intersection
     
     twigRate: 5e-3, // helix to spawn twig
     twigLen: [.01,.03],

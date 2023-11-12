@@ -15,6 +15,7 @@ function draw(fps, t) {
     g.strokeStyle = global.vineColor
     g.fillStyle = global.vineColor
     g.lineWidth = global.vineThickness
+    g.lineCap = 'round'
     let newTwigs = global.allVines.flatMap( v => v.draw(g) )
     global.allVines.push(...newTwigs)
 
