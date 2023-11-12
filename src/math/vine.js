@@ -1,4 +1,4 @@
-// animated ivy branch
+// ivy branch segment wrapping around a scaffold
 class Vine {
     constructor(scaffold,start,stop,reverseHelix=false,startPadding=null){
         this.scaffold = scaffold
@@ -23,7 +23,6 @@ class Vine {
         this.norm = d.getAngle() + pio2
         
         let rd = randRange(...global.spiralDensity)
-        console.log(rd)
         let n = Math.floor( dist * rd )
         if( n < 1 ) n = 1
         this.nPeriods = n
@@ -124,6 +123,8 @@ class Vine {
     }
     
     draw(g){
+        let newTwigs = []
+        
         var a = this.a
         var b = this.b
         var nSegs = this.nSegs
@@ -133,27 +134,39 @@ class Vine {
         
         //g.restore()
         
-        // draw vine
+        // draw vine segment
         var prev = a
         for( var i = start ; (i<stop)&&(i<nSegs) ; i++ ){
             var ang = twopi*i/nSegs*this.nPeriods
             var padding = avg(this.startPadding,this.stopPadding,i/nSegs)
             
-            // occlude parts of the vine the scaffolds
-            g.globalCompositeOperation = (((ang+pio2)%twopi)<pi) ? "destination-over" : "source-over";  
+            // decide whether this should be occluded by scaffold
+            let infront = (((ang+pio2)%twopi)<pi)
+            g.globalCompositeOperation = infront ? "destination-over" : "source-over";  
             
+            // compute point on helix
             var amp = this.amp * Math.sin(ang)
             if( this.reverseHelix ) amp *= -1
             amp += Math.sign(amp) * padding
             var p = va(a,b,i/nSegs).add(vp(this.norm,amp))
             
+            //draw circle
             g.beginPath()
             g.moveTo(p.x,p.y)
             g.arc(p.x,p.y,global.vineThickness/2,0,twopi)
             g.fill()
             
+            if( rand() < global.twigRate ){
+                // add twig to be drawn later
+                let angle = this.scaffold.angle+pio2
+                if( amp > 0 ) angle += pi
+                angle += randRange(-pio4,pio4)
+                newTwigs.push( new Twig(p,angle,infront) )
+            }
+            
             prev = p
         }
          
+        return newTwigs
     }
 }

@@ -1,10 +1,13 @@
-Procedural animated spiral doodles with plant-like growth and movement.
 
-Reload the page to reset
+
+Ivy procedurally grows on a lattice. 
+
+New trick using js canvas globalCompositeOperation for occlusion. To draw ivy spiralling around the scaffold, alternate between two different compositing modes (front vs behind). 
+
 
 ## Demo
 
-https://tessmero.github.io/spirals.html
+https://tessmero.github.io/ivy.html
 
 ## Usage
 

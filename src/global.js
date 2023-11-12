@@ -12,11 +12,11 @@ const global = {
     ctx: null,
 
     // 
-    vineColor: 'green',
-    scaffoldColor: 'gray',
+    vineColor: '#393',
+    scaffoldColor: '#742',
     
     //
-    scaffoldThickness: .008,
+    scaffoldThickness: .01,
     vineThickness: .005,
     
     vinePadding: .002, // max space between a vine and its scaffold
@@ -30,7 +30,11 @@ const global = {
     
     growthSpeed: 4e-4, // distance per ms
     
-    branchRate: .4, 
+    branchRate: .3, // chance for helix to branch to >1 scaffold
+    
+    twigRate: 3e-3, // chance to spawn twig
+    twigLen: [.01,.03],
+    
     
     // relate screen pixels to virtual 2D units
     canvasOffsetX: 0,
@@ -45,7 +49,7 @@ const global = {
     
     // objects
     allScaffolds: [],
-    allVines: [],
+    allVines: [], // Vine or Twig instances
     
     // balloon collision settings
     nCollisionChecks: 10, // checks per balloon per update
